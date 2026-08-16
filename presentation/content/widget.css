@@ -1,0 +1,236 @@
+#word-capture-widget {
+  position: absolute;
+  z-index: 2147483647;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #1a1a2e;
+}
+
+#word-capture-widget .wc-container {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  min-width: 280px;
+  max-width: 320px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+#word-capture-widget .wc-container.wc-animate {
+  animation: wc-slide-in 0.2s ease-out;
+}
+
+@keyframes wc-slide-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wc-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #999;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.15s ease;
+}
+
+.wc-close-btn:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.wc-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-right: 24px;
+}
+
+.wc-word-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.wc-level-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.wc-body {
+  margin-bottom: 12px;
+}
+
+.wc-translations {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wc-translation-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  background: #f8f9fa;
+  border-left: 3px solid transparent;
+}
+
+.wc-translation-item:hover {
+  background: #e8f0fe;
+}
+
+.wc-translation-item.active {
+  background: #e8f0fe;
+  border-left-color: #4a90d9;
+}
+
+.wc-trans-bullet {
+  font-size: 8px;
+  color: #ccc;
+  transition: color 0.12s ease;
+  flex-shrink: 0;
+}
+
+.wc-translation-item.active .wc-trans-bullet {
+  color: #4a90d9;
+}
+
+.wc-trans-text {
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+  flex: 1;
+}
+
+.wc-translation-item.active .wc-trans-text {
+  color: #1a1a2e;
+}
+
+.wc-trans-pos {
+  font-size: 11px;
+  color: #888;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.wc-pronunciation {
+  font-size: 13px;
+  color: #888;
+  font-style: italic;
+  margin-top: 6px;
+  padding-left: 12px;
+}
+
+.wc-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  padding: 12px 0;
+}
+
+.wc-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e0e0e0;
+  border-top-color: #4a90d9;
+  border-radius: 50%;
+  animation: wc-spin 0.8s linear infinite;
+}
+
+@keyframes wc-spin {
+  to { transform: rotate(360deg); }
+}
+
+.wc-footer {
+  display: flex;
+  gap: 8px;
+}
+
+.wc-save-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #4a90d9;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wc-save-btn:hover:not(:disabled) {
+  background: #357abd;
+  transform: translateY(-1px);
+}
+
+.wc-save-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.wc-save-btn--saving {
+  background: #7bb3e8;
+  cursor: wait;
+  pointer-events: none;
+}
+
+.wc-save-btn--success {
+  background: #4caf50;
+}
+
+.wc-save-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: wc-spin 0.6s linear infinite;
+  flex-shrink: 0;
+}
+
+.wc-success {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #4caf50;
+  color: white;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  animation: wc-fade-in 0.2s ease;
+}
+
+@keyframes wc-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

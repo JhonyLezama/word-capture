@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WordCapture - Configuración</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="options-container">
+    <header class="options-header">
+      <h1>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+        </svg>
+        WordCapture Configuración
+      </h1>
+    </header>
+
+    <main class="options-main">
+      <section class="option-section">
+        <h2>Idiomas</h2>
+        <div class="option-row">
+          <label for="targetLang">Idioma destino:</label>
+          <select id="targetLang" class="option-select">
+            <option value="es">Español</option>
+            <option value="pt">Portugués</option>
+            <option value="fr">Francés</option>
+            <option value="de">Alemán</option>
+            <option value="it">Italiano</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="option-section">
+        <h2>Atajos de teclado</h2>
+        <div class="option-row">
+          <label>Traducir selección:</label>
+          <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>T</kbd>
+        </div>
+        <div class="option-row">
+          <label>Abrir WordCapture:</label>
+          <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>W</kbd>
+        </div>
+      </section>
+
+      <section class="option-section">
+        <h2>Datos</h2>
+        <div class="option-row">
+          <button class="btn btn-secondary" id="exportBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Exportar palabras
+          </button>
+          <button class="btn btn-secondary" id="importBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            Importar palabras
+          </button>
+          <input type="file" id="importFile" accept=".json" style="display:none">
+        </div>
+      </section>
+
+      <section class="option-section danger">
+        <h2>Zona de peligro</h2>
+        <div class="option-row">
+          <button class="btn btn-danger" id="clearDataBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+            </svg>
+            Borrar todas las palabras
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast"></div>
+  </div>
+  <script src="OptionsController.js" type="module"></script>
+</body>
+</html>

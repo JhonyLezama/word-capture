@@ -1,0 +1,16 @@
+{
+  "name": "word-capture",
+  "version": "1.0.0",
+  "description": "Browser extension to capture and translate English words for vocabulary learning",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "@eslint/js": "^9.0.0",
+    "globals": "^16.0.0"
+  },
+  "license": "MIT"
+}

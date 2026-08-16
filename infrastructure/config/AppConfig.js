@@ -1,0 +1,29 @@
+export const AppConfig = {
+  DB_NAME: 'WordCaptureDB',
+  DB_VERSION: 1,
+
+  DEFAULT_SOURCE_LANG: 'en',
+  DEFAULT_TARGET_LANG: 'es',
+
+  LEVELS: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'],
+
+  REVIEW: {
+    MASTERY_THRESHOLD: 5,
+    MIN_QUALITY_FOR_MASTERY: 4,
+    DEFAULT_INTERVAL: 1,
+    FIRST_INTERVAL: 1,
+    SECOND_INTERVAL: 6,
+  },
+
+  UI: {
+    POPUP_WIDTH: 320,
+    POPUP_MIN_HEIGHT: 200,
+    WIDGET_Z_INDEX: 2147483647,
+    TOAST_DURATION: 3000,
+  },
+
+  KEYBOARD_SHORTCUTS: {
+    TRANSLATE_SELECTION: 'Ctrl+Shift+T',
+    TOGGLE_POPUP: 'Ctrl+Shift+W',
+  }
+};
