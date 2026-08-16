@@ -12,7 +12,29 @@
     CLOSE_BTN: '.wc-close-btn',
     LOADING: '.wc-loading',
     SUCCESS: '.wc-success',
+    AUDIO_BTN: '.wc-audio-btn',
   };
+
+  function speakWord(text) {
+    if (!text) return;
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.8;
+    speechSynthesis.speak(utterance);
+  }
+
+  function createAudioBtn(text) {
+    const btn = document.createElement('button');
+    btn.className = 'wc-audio-btn';
+    btn.title = 'Escuchar';
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/></svg>`;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      speakWord(text);
+    });
+    return btn;
+  }
 
   const Messages = {
     TRANSLATE_WORD: 'TRANSLATE_WORD',
@@ -38,6 +60,13 @@
         <button class="wc-close-btn" aria-label="Close">&times;</button>
         <div class="wc-header">
           <span class="wc-word-text"></span>
+          <button class="wc-audio-btn wc-audio-header" title="Escuchar palabra">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M15.54 8.46a5 5 0 010 7.07"/>
+              <path d="M19.07 4.93a10 10 0 010 14.14"/>
+            </svg>
+          </button>
           <span class="wc-level-badge"></span>
         </div>
         <div class="wc-body">
@@ -75,6 +104,11 @@
 
   function bindWidgetEvents() {
     widget.querySelector(SELECTORS.CLOSE_BTN).addEventListener('click', hideWidget);
+
+    widget.querySelector('.wc-audio-header').addEventListener('click', () => {
+      const wordEl = widget.querySelector(SELECTORS.WORD_TEXT);
+      speakWord(wordEl.dataset.word);
+    });
 
     widget.querySelector(SELECTORS.SAVE_BTN).addEventListener('click', () => {
       const wordEl = widget.querySelector(SELECTORS.WORD_TEXT);
@@ -280,6 +314,8 @@
         posTag.textContent = t.pos;
         item.appendChild(posTag);
       }
+
+      item.appendChild(createAudioBtn(t.text));
 
       item.addEventListener('click', () => {
         container.querySelectorAll('.wc-translation-item').forEach(el => el.classList.remove('active'));

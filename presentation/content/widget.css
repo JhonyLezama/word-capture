@@ -63,6 +63,38 @@
   color: #1a1a2e;
 }
 
+.wc-audio-header {
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+.wc-audio-header:hover {
+  opacity: 1;
+}
+
+.wc-audio-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.wc-audio-btn:hover {
+  color: #4a90d9;
+  background: rgba(74, 144, 217, 0.1);
+}
+
+.wc-audio-btn svg {
+  pointer-events: none;
+}
+
 .wc-level-badge {
   font-size: 11px;
   font-weight: 600;

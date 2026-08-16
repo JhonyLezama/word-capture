@@ -8,6 +8,25 @@ const Messages = {
   REVIEW_WORD: 'REVIEW_WORD',
 };
 
+function speakWord(text) {
+  if (!text) return;
+  speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'en-US';
+  utterance.rate = 0.8;
+  speechSynthesis.speak(utterance);
+}
+
+function createAudioBtn(text, className = 'audio-btn') {
+  return `<button class="${className}" data-word="${text}" title="Escuchar">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <path d="M15.54 8.46a5 5 0 010 7.07"/>
+      <path d="M19.07 4.93a10 10 0 010 14.14"/>
+    </svg>
+  </button>`;
+}
+
 class PopupController {
   constructor() {
     this.currentTab = 'history';
@@ -96,6 +115,7 @@ class PopupController {
             <div class="word-translations">${this.#renderTranslations(translations)}</div>
           </div>
           <div class="word-meta">
+            ${createAudioBtn(word.text)}
             <span class="level-badge ${word.level}">${word.level}</span>
             <button class="delete-btn" data-id="${word.id}" title="Eliminar">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -107,6 +127,13 @@ class PopupController {
         </div>
       `;
     }).join('');
+
+    wordList.querySelectorAll('.audio-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        speakWord(btn.dataset.word);
+      });
+    });
 
     wordList.querySelectorAll('.delete-btn').forEach(btn => {
       btn.addEventListener('click', async (e) => {
@@ -156,9 +183,14 @@ class PopupController {
       <div class="review-card">
         <div class="review-word">${word.text}</div>
         <div class="review-hint">Nivel ${word.level}</div>
+        ${createAudioBtn(word.text, 'audio-btn review-audio')}
         <button class="review-btn good" id="showAnswer">Mostrar respuesta</button>
       </div>
     `;
+
+    container.querySelector('.review-audio').addEventListener('click', () => {
+      speakWord(word.text);
+    });
 
     document.getElementById('showAnswer').addEventListener('click', () => {
       const translations = word.translations || (word.translation ? [{ text: word.translation, pos: '' }] : []);

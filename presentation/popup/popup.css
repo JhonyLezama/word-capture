@@ -248,6 +248,32 @@ body {
   background: #ffebee;
 }
 
+.audio-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.audio-btn:hover {
+  color: #4a90d9;
+  background: rgba(74, 144, 217, 0.1);
+}
+
+.audio-btn svg {
+  pointer-events: none;
+}
+
+.review-audio {
+  margin-bottom: 16px;
+}
+
 .empty-state {
   display: flex;
   flex-direction: column;
