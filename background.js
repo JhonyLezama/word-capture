@@ -10,6 +10,8 @@ const Messages = {
   GET_STATS: 'GET_STATS',
   GET_DUE_REVIEW: 'GET_DUE_REVIEW',
   REVIEW_WORD: 'REVIEW_WORD',
+  EXPORT_WORDS: 'EXPORT_WORDS',
+  IMPORT_WORDS: 'IMPORT_WORDS',
 };
 
 let container = null;
@@ -47,7 +49,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === 'translate-word' && info.selectionText) {
     const word = info.selectionText.trim();
-    if (!/^[a-zA-Z]+(?:[- ][a-zA-Z]+)*$/.test(word) || word.length < 2 || word.length > 60) return;
+    if (!/^[a-zA-Z]+(?:[- '][a-zA-Z]+)*$/.test(word) || word.length < 2 || word.length > 60) return;
     if (!tab || !tab.id) return;
 
     try {
@@ -108,6 +110,12 @@ async function handleMessage(message, _sender) {
 
     case Messages.REVIEW_WORD:
       return handleReviewWord(di, message.data);
+
+    case Messages.EXPORT_WORDS:
+      return handleExportWords(di);
+
+    case Messages.IMPORT_WORDS:
+      return handleImportWords(di, message.data);
 
     default:
       return { error: 'Unknown message type' };
@@ -191,4 +199,44 @@ async function handleReviewWord(di, data) {
     nextReview: result.nextReview,
     mastered: result.mastered,
   };
+}
+
+async function handleExportWords(di) {
+  const words = await di.repository.findAll();
+  const data = words.map(w => w.toJSON());
+  return { words: data, count: data.length };
+}
+
+async function handleImportWords(di, data) {
+  const { words } = data;
+  if (!Array.isArray(words)) return { error: 'Invalid data' };
+
+  let imported = 0;
+  let skipped = 0;
+
+  for (const wordData of words) {
+    const existing = await di.repository.findByText(wordData.text);
+    if (existing) {
+      skipped++;
+      continue;
+    }
+
+    const word = new Word({
+      id: wordData.id || generateId(),
+      text: wordData.text.toLowerCase(),
+      translations: wordData.translations || (wordData.translation ? [{ text: wordData.translation, pos: '' }] : []),
+      level: wordData.level || 'A1',
+      context: wordData.context || '',
+      sourceUrl: wordData.sourceUrl || '',
+      createdAt: wordData.createdAt || Date.now(),
+      reviewData: wordData.reviewData,
+      timesReviewed: wordData.timesReviewed || 0,
+      mastered: wordData.mastered || false,
+    });
+
+    await di.repository.save(word);
+    imported++;
+  }
+
+  return { success: true, imported, skipped };
 }

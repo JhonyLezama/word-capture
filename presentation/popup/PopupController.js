@@ -27,6 +27,15 @@ function createAudioBtn(text, className = 'audio-btn') {
   </button>`;
 }
 
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 class PopupController {
   constructor() {
     this.currentTab = 'history';
@@ -56,6 +65,24 @@ class PopupController {
     document.getElementById('settingsBtn').addEventListener('click', () => {
       chrome.runtime.openOptionsPage();
     });
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      this.toggleTheme();
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      this.exportWords();
+    });
+
+    document.getElementById('importBtn').addEventListener('click', () => {
+      document.getElementById('importFile').click();
+    });
+
+    document.getElementById('importFile').addEventListener('change', (e) => {
+      this.importWords(e.target.files[0]);
+    });
+
+    this.initTheme();
   }
 
   switchTab(tab) {
@@ -108,11 +135,13 @@ class PopupController {
 
     wordList.innerHTML = response.words.map(word => {
       const translations = word.translations || (word.translation ? [{ text: word.translation, pos: '' }] : []);
+      const contextHtml = word.context ? `<div class="word-context">"${word.context}"</div>` : '';
       return `
         <div class="word-item" data-id="${word.id}">
           <div class="word-info">
             <div class="word-text">${word.text}</div>
             <div class="word-translations">${this.#renderTranslations(translations)}</div>
+            ${contextHtml}
           </div>
           <div class="word-meta">
             ${createAudioBtn(word.text)}
@@ -162,7 +191,7 @@ class PopupController {
       return;
     }
 
-    this.reviewWords = response.words;
+    this.reviewWords = shuffleArray(response.words);
     this.currentReviewIndex = 0;
     this.showReviewCard();
   }
@@ -178,13 +207,21 @@ class PopupController {
   showReviewCard() {
     const container = document.getElementById('reviewContainer');
     const word = this.reviewWords[this.currentReviewIndex];
+    const total = this.reviewWords.length;
+    const current = this.currentReviewIndex + 1;
 
     container.innerHTML = `
+      <div class="review-progress">${current} de ${total}</div>
       <div class="review-card">
         <div class="review-word">${word.text}</div>
         <div class="review-hint">Nivel ${word.level}</div>
         ${createAudioBtn(word.text, 'audio-btn review-audio')}
         <button class="review-btn good" id="showAnswer">Mostrar respuesta</button>
+        <button class="review-skip" id="skipWord" title="Saltar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/>
+          </svg>
+        </button>
       </div>
     `;
 
@@ -192,9 +229,19 @@ class PopupController {
       speakWord(word.text);
     });
 
+    document.getElementById('skipWord').addEventListener('click', () => {
+      this.currentReviewIndex++;
+      if (this.currentReviewIndex < this.reviewWords.length) {
+        this.showReviewCard();
+      } else {
+        this.loadReview();
+      }
+    });
+
     document.getElementById('showAnswer').addEventListener('click', () => {
       const translations = word.translations || (word.translation ? [{ text: word.translation, pos: '' }] : []);
       container.innerHTML = `
+        <div class="review-progress">${current} de ${total}</div>
         <div class="review-card">
           <div class="review-word">${word.text}</div>
           <div class="review-translations">${this.#renderReviewTranslations(translations)}</div>
@@ -242,7 +289,7 @@ class PopupController {
     const maxCount = Math.max(...levels.map(l => (response.byLevel || {})[l] || 0), 1);
 
     levelBreakdown.innerHTML = `
-      <h3 style="font-size:14px;margin-bottom:12px;color:#333;">Palabras por nivel</h3>
+      <h3 class="level-breakdown-title">Palabras por nivel</h3>
       ${levels.map(level => {
         const count = (response.byLevel || {})[level] || 0;
         const percentage = (count / maxCount) * 100;
@@ -257,6 +304,50 @@ class PopupController {
         `;
       }).join('')}
     `;
+  }
+
+  initTheme() {
+    const saved = localStorage.getItem('wc-theme');
+    if (saved === 'dark') {
+      document.body.classList.add('dark');
+    } else if (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.body.classList.add('dark');
+    }
+  }
+
+  toggleTheme() {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('wc-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  }
+
+  async exportWords() {
+    const response = await this.sendMessage({ type: Messages.EXPORT_WORDS });
+    if (!response || !response.words) return;
+
+    const blob = new Blob([JSON.stringify(response.words, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `wordcapture-export-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async importWords(file) {
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const words = JSON.parse(text);
+      const response = await this.sendMessage({ type: Messages.IMPORT_WORDS, data: { words } });
+
+      if (response && response.success) {
+        alert(`Importadas: ${response.imported} | Omitidas: ${response.skipped}`);
+        this.loadHistory();
+      }
+    } catch {
+      alert('Error al importar: archivo inválido');
+    }
   }
 
   sendMessage(message) {

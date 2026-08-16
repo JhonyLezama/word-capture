@@ -379,7 +379,7 @@
       if (Date.now() - lastHideTime < 300) return;
       if (widget && widget.contains(e.target)) return;
       const text = getSelectedText();
-      if (text && /^[a-zA-Z]+(?:[- ][a-zA-Z]+)*$/.test(text) && text.length >= 2 && text.length <= 60) {
+      if (text && /^[a-zA-Z]+(?:[- '][a-zA-Z]+)*$/.test(text) && text.length >= 2 && text.length <= 60) {
         showWidget(e.clientX, e.clientY, text);
       }
     }, 10);

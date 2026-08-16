@@ -212,6 +212,49 @@ body {
   margin-left: 2px;
 }
 
+.word-context {
+  font-size: 11px;
+  color: #888;
+  font-style: italic;
+  margin-top: 4px;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 250px;
+}
+
+.actions-bar {
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px;
+  background: white;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.action-btn:hover {
+  background: #e8e8e8;
+  border-color: #ccc;
+}
+
+.action-btn svg {
+  pointer-events: none;
+}
+
 .word-meta {
   display: flex;
   align-items: center;
@@ -272,6 +315,38 @@ body {
 
 .review-audio {
   margin-bottom: 16px;
+}
+
+.review-progress {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.review-skip {
+  background: none;
+  border: none;
+  color: #888;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.review-skip:hover {
+  color: #4a90d9;
+  background: rgba(74, 144, 217, 0.1);
+}
+
+.review-skip svg {
+  pointer-events: none;
 }
 
 .empty-state {
@@ -426,6 +501,12 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
+.level-breakdown-title {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #333;
+}
+
 .level-row {
   display: flex;
   align-items: center;
@@ -479,4 +560,158 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #ccc;
+}
+
+/* Dark mode */
+body.dark {
+  background: #1a1a2e;
+  color: #e0e0e0;
+}
+
+body.dark .header {
+  background: linear-gradient(135deg, #2d3a5c 0%, #1a2744 100%);
+}
+
+body.dark .search-bar {
+  background: #252540;
+  border-bottom-color: #333;
+}
+
+body.dark .search-input {
+  background: #1a1a2e;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark .filter-select {
+  background: #1a1a2e;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark .actions-bar {
+  background: #252540;
+  border-bottom-color: #333;
+}
+
+body.dark .action-btn {
+  background: #1a1a2e;
+  border-color: #444;
+  color: #ccc;
+}
+
+body.dark .action-btn:hover {
+  background: #333;
+  border-color: #555;
+}
+
+body.dark .word-item {
+  background: #252540;
+  border-color: #333;
+}
+
+body.dark .word-item:hover {
+  border-color: #4a90d9;
+  box-shadow: 0 2px 8px rgba(74, 144, 217, 0.2);
+}
+
+body.dark .word-text {
+  color: #e0e0e0;
+}
+
+body.dark .word-translation-single,
+body.dark .word-trans {
+  color: #bbb;
+}
+
+body.dark .word-trans.primary {
+  color: #e0e0e0;
+  background: #2d3a5c;
+}
+
+body.dark .word-context {
+  color: #888;
+}
+
+body.dark .delete-btn {
+  color: #666;
+}
+
+body.dark .delete-btn:hover {
+  color: #f44336;
+  background: rgba(244, 67, 54, 0.15);
+}
+
+body.dark .audio-btn {
+  color: #888;
+}
+
+body.dark .audio-btn:hover {
+  color: #4a90d9;
+  background: rgba(74, 144, 217, 0.15);
+}
+
+body.dark .review-card {
+  background: #252540;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .review-word {
+  color: #e0e0e0;
+}
+
+body.dark .review-trans-item {
+  background: #1a2744;
+  color: #4a90d9;
+}
+
+body.dark .review-skip {
+  color: #888;
+}
+
+body.dark .review-skip:hover {
+  color: #4a90d9;
+  background: rgba(74, 144, 217, 0.15);
+}
+
+body.dark .stat-card {
+  background: #252540;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .stat-label {
+  color: #aaa;
+}
+
+body.dark .level-breakdown {
+  background: #252540;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .level-breakdown h3 {
+  color: #e0e0e0;
+}
+
+body.dark .review-hint {
+  color: #aaa;
+}
+
+body.dark .level-bar-bg {
+  background: #1a1a2e;
+}
+
+body.dark .level-count {
+  color: #aaa;
+}
+
+body.dark .empty-state {
+  color: #888;
+}
+
+body.dark ::-webkit-scrollbar-thumb {
+  background: #444;
+}
+
+body.dark ::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
